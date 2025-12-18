@@ -3,8 +3,8 @@ const std = @import("std");
 var stdout_writer = std.fs.File.stdout().writerStreaming(&.{});
 const stdout = &stdout_writer.interface;
 
-pub fn handleComandError(comand: []const u8) !void {
-    try stdout.print("{s}: command not found\n", .{comand});
+pub fn handleComandError(command: []const u8) !void {
+    try stdout.print("{s}: command not found\n", .{command});
 }
 
 pub fn main() !void {
@@ -15,6 +15,7 @@ pub fn main() !void {
 
         try stdout.print("$ ", .{});
         const stream = try stdin.takeDelimiterExclusive('\n');
+        if (std.mem.eql(u8, stream, "exit")) break;
         try handleComandError(stream);
     }
 }
